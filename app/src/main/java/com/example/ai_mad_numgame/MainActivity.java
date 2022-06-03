@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     int []performance={-1,-1,-1,-1,-1,-1}; //score of a game is updated in this array
     int []score={-1,-1,-1}; //score of each match is updated in this array. A total of three matches in a game
     String operators[]={"+","-","*","/"};
-    int correctButton=0; //which button will have the correct answer (tag of that button)
+    int correctButton= 0;//which button will have the correct answer (tag of that button)
     Random random=new Random(); //You will generate randdom alegebra questions
     TextView textView2;
     Button button1,button2,button3,button4;
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         int[][]dataFrame=dataPrep(); //dataPrep function returns a two-dimenssional array
         double slope=LR.getSlope(dataFrame); //LR class, which provides slope on invoking getSlope
         new AlertDialog.Builder(this)
-               // .setIcon() //your custom icon
+                // .setIcon() //your custom icon
                 .setTitle("Performance")
 
                 .setMessage(getInterpretation(dataFrame,slope))
@@ -72,12 +72,54 @@ public class MainActivity extends AppCompatActivity {
     public void newMatch() {  //A game is composed of three matches
 
         int operand1 = random.nextInt(10);
-        int operand2=0;
+        int operand2=random.nextInt(6);
         //check is operand2 is not zero; otherwise in case of division-divide by zero error will come
         String operator = operators[random.nextInt(4)];
         textView2.setText(operand1 + operator + operand2);
-
-      // Your code here, to diplay correct and incorrect options on the buttons
+        int correctans=0;
+        int min=0,max=3;
+        correctButton=(int) Math.floor(Math.random() * (max - min+1) + min);
+        if(operator=="+")
+            correctans=operand1+operand2;
+        else if(operator=="*")
+            correctans=operand1*operand2;
+        else if(operator=="-")
+            correctans=operand1-operand2;
+        else if(operator=="/")
+            correctans=operand1/operand2;
+//        button1.setText(Integer.toString(correctans));
+//        button2.setText(Integer.toString(correctans+1));
+//        button3.setText(Integer.toString(correctans-3));
+//        button4.setText(Integer.toString(correctans+2));
+        if(correctButton==0)
+        {
+            button1.setText(Integer.toString(correctans));
+            button2.setText(Integer.toString(correctans+1));
+            button3.setText(Integer.toString(correctans-3));
+            button4.setText(Integer.toString(correctans+2));
+        }
+        else if(correctButton==1)
+        {
+            button1.setText(Integer.toString(correctans-1));
+            button2.setText(Integer.toString(correctans));
+            button3.setText(Integer.toString(correctans-3));
+            button4.setText(Integer.toString(correctans+2));
+        }
+        else if(correctButton==2)
+        {
+            button1.setText(Integer.toString(correctans-1));
+            button2.setText(Integer.toString(correctans-8));
+            button3.setText(Integer.toString(correctans));
+            button4.setText(Integer.toString(correctans+2));
+        }
+        else if(correctButton==3)
+        {
+            button1.setText(Integer.toString(correctans-1));
+            button2.setText(Integer.toString(correctans+7));
+            button3.setText(Integer.toString(correctans-3));
+            button4.setText(Integer.toString(correctans));
+        }
+        // Your code here, to diplay correct and incorrect options on the buttons
 
         if(matchCounter==3){    // if three matches are completed updatee the perfomrance in sharedpreferences
 
@@ -95,7 +137,11 @@ public class MainActivity extends AppCompatActivity {
     public int sumOfScore(){
         //Computing the sum of score array, which has the 1 or in each index,depending on correct or incorrect answers
         int sum=0;
-       // your code here
+        for(int i=0;i<3;i++)
+        {
+            sum+=score[i];
+        }
+        // your code here
         return sum;
     }
 
@@ -113,8 +159,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public String getInterpretation(int [][]dataFrame,double slope){
-       //provide interpretation based on your slope analysis
+        //provide interpretation based on your slope analysis
         // Your code here
-        return "Your Interpretation";
+        String s="good keep it up";
+        if(slope<0)
+            return "your not attentive";
+        else if(slope>0 && slope<5.0)
+            return "slow and steady";
+        else if(slope>5.0)
+            return "your getting better with time";
+
+//        return "Your Interpretation";
+        return s;
     }
 }
